@@ -20,9 +20,9 @@ def Login(conn, username, password) :
     cur.execute( "SELECT * FROM users WHERE username = " + username + " AND password = " + password )
 
     for name, pas in cur.fetchall() :
-        if(username == name and pas == password)
+        if(username == name and pas == password):
 			print "Logged in"
-		else
+		else:
 			print "Incorrect user or pass"
 	
 print "Using psycopg2"
