@@ -22,7 +22,7 @@ def Login(conn, username, password) :
     for name, pas in cur.fetchall() :
         if(username == name and pas == password):
 			print "Logged in"
-		else:
+		else
 			print "Incorrect user or pass"
 	
 print "Using psycopg2"
