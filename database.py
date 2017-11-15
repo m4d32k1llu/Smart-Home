@@ -17,7 +17,7 @@ def doQuery( conn ) :
 def Login(conn, username, password) :
     cur = conn.cursor()
 
-    cur.execute( "SELECT * FROM users WHERE username = " username+ " AND password = " + password )
+    cur.execute( "SELECT * FROM users WHERE username = " + username + " AND password = " + password )
 
     for name, pas in cur.fetchall() :
         if(username == name and pas == password)
