@@ -28,5 +28,7 @@ def Login(conn, username, password) :
 print "Using psycopg2"
 import psycopg2
 myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
-doQuery( myConnection )
+user = raw_input('username:')
+pas = raw_input('password:')
+Login(user, pas)
 myConnection.close()
