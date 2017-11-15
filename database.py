@@ -15,7 +15,7 @@ def doQuery( conn ) :
         print name
 
 
-print "Using psycopg2…"
+print "Using psycopg2"
 import psycopg2
 myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
 doQuery( myConnection )
