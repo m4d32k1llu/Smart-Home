@@ -30,5 +30,5 @@ import psycopg2
 myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
 user = raw_input('username:')
 pas = raw_input('password:')
-Login(user, pas)
+Login(myConnection, user, pas)
 myConnection.close()
