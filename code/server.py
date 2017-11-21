@@ -7,7 +7,7 @@ TCP_IP = 'localhost'
 TCP_PORT = 31415
 
 KEK = "0123456789abcdef"
-INTEGRITY_KEY = "thisstheintegkey"
+#INTEGRITY_KEY = "thisstheintegkey"
 INFO_BYTE = 13
 
 def server():
@@ -41,16 +41,17 @@ def server():
         print "[S] challenge accomplished, continue"
         
       # receive message
-      msg = recv_msg(conn, skey)
-      info_block = msg[:16]
-      integrity_block = msg[16:32]
-      if integrity_block != INTEGRITY_KEY:
+      msg = recv_msg(conn, skey, True)
+      #info_block = msg[:16]
+      #integrity_block = msg[16:32]
+      #if integrity_block != INTEGRITY_KEY:
+      if msg == -1:
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
         continue
       
       # send response
-      new_state = info_block[INFO_BYTE]
+      new_state = msg[INFO_BYTE]
       if new_state == "1":
         print "[S] turning on the light"
       elif new_state == "0":
@@ -58,9 +59,12 @@ def server():
       else:
         print "[S] unrecognized option", repr(new_state)
       iv = gen_iv()
-      response = "server received: [" +  msg + "] with new state [" + new_state + "]"
+      response = "DEBUG server received: [" +  msg + "] with new state [" + new_state + "]"
       send_msg(conn, iv, skey, response)
-            
+    except:
+      print "[S] exception catched"
+      conn.close()
+      
     finally:
       print '[S] closing connection to:', client_addr
       conn.close()
