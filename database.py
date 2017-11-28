@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import bcrypt
+
 hostname = 'db.ist.utl.pt'
 username = 'ist178876'
 password = 'epiphone'
@@ -16,12 +18,12 @@ def doQuery( conn ) :
 
 def Login(conn, username, password) :
     cur = conn.cursor()
-
+    
     cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
 
     for name, pas in cur.fetchall() :
-        if(username == name and pas == password):
-	    return "Logged in"
+        if bcrypt.checkpw(password, pas):
+	    return "Logged in as " + name
     return "Incorrect username or password"
 	
 print "Using psycopg2"
