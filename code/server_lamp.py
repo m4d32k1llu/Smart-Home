@@ -41,10 +41,11 @@ def server():
         print "[S] challenge accomplished, continue"
         
       # receive message
-      msg = recv_msg(conn, skey)
-      info_block = msg[:16]
-      integrity_block = msg[16:32]
-      if integrity_block != INTEGRITY_KEY:
+      msg = recv_msg(conn, skey)#, True)
+      integrity_block = msg[:16]
+      info_block = msg[16:32]
+      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[8:13]):
+      # if msg == -1:
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
         continue
@@ -58,9 +59,12 @@ def server():
       else:
         print "[S] unrecognized option", repr(new_state)
       iv = gen_iv()
-      response = "server received: [" +  msg + "] with new state [" + new_state + "]"
+      response = "DEBUG server received: [" +  msg + "] with new state [" + new_state + "]"
       send_msg(conn, iv, skey, response)
-            
+    except:
+      print "[S] exception catched"
+      conn.close()
+      
     finally:
       print '[S] closing connection to:', client_addr
       conn.close()

@@ -46,7 +46,7 @@ def send_msg(conn, iv, key, msg):
   conn.sendall(msg)
   return
 
-def recv_msg(conn, key, mac=False):
+def recv_msg(conn, key):
   try:
     msg = conn.recv(1024)  
     if not msg:
@@ -55,17 +55,6 @@ def recv_msg(conn, key, mac=False):
       decrypted = decrypt(msg[:16], key, msg[16:])
       print >>sys.stderr, '[*] received: "%s"' % repr(msg)
       print >>sys.stderr, '[*] received dec: "%s"' % repr(decrypted)
-    if mac:
-      newiv = msg[:16]
-      newmsg = msg[16:]
-      newenc = encrypt(newiv, key, newmsg)
-      print "[*] mac checking ["+repr(msg[16:])+"] == ["+repr(newmsg)+"]"
-      if msg[16:] == newmsg:
-        print "[*] mac ok"
-        return decrypted
-      else:
-        print "[*] mac failed"
-        return -1 # code for integrity failed
     return decrypted
   except:
     print 'Error receiving message'
