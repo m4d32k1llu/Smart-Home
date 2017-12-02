@@ -5,5 +5,5 @@ create table users(
 	password	varchar(60) not null
 );
 
-insert into users values ('super', '$2b$12$hyx1Z83DP9vyaOYvdbz3GO7tPX5BtQ/qA9aoOThrrjYO9JkbZ0MFC');
+insert into users values ('super', '$2b$12$/lwyGZ0vbfEL7t0d35fMOObqjFkALtN7zekV2shSU05Ik2BJHGc9W');
 
