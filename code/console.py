@@ -5,7 +5,7 @@ import ssl
 import lamp
 import time
 
-TCP_IP = 'localhost'
+TCP_IP = '192.168.2.1'
 TCP_PORT = 12345
 
 prompt = "[HomeMgr: insert a command]>> "
