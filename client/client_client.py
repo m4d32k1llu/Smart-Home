@@ -15,9 +15,14 @@ ssl_sock = ssl.wrap_socket(sock,
 
 print >>sys.stderr, '[C] connecting to: %s; port: %s' % client_addr
 ssl_sock.connect(client_addr)
+print "Please Log in..."
 user = raw_input('username:')
 pas = getpass.getpass('password:');
-
+r = ssl_sock.recv(1024)
+print "[C] received:", r
+s = "login "+ user + " " + pas
+print "[C] sending:", s
+ssl_sock.sendall(s) 
 try:
   while True:
     r = ssl_sock.recv(1024)
