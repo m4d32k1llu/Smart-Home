@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import getpass
 import bcrypt
 
 hostname = 'db.ist.utl.pt'
@@ -30,6 +30,6 @@ print "Using psycopg2"
 import psycopg2
 myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
 user = raw_input('username:')
-pas = raw_input('password:')
+pas = getpass.getpass('password:')
 print Login(myConnection, user, pas)
 myConnection.close()

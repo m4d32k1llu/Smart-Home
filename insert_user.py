@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import getpass
 import psycopg2
 import bcrypt
 
@@ -33,12 +33,12 @@ try:
     myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
 except:
     print "Unable to connect to database"
-pas = raw_input('password:')
+pas = getpass.getpass('password:')
 if not Login(myConnection, "super", pas):
     print "Incorrect password"
 else:
     print "Type new user settings..."
     user = raw_input('username:')
-    pas = raw_input('password:')
+    pas = getpass.getpass('password:')
     insert(myConnection, user, pas)
 myConnection.close()

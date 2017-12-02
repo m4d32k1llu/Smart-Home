@@ -1,6 +1,7 @@
 import socket
 import ssl
 import sys
+import getpass
 
 TCP_IP = '192.168.2.1'
 TCP_PORT = 12345
@@ -14,6 +15,8 @@ ssl_sock = ssl.wrap_socket(sock,
 
 print >>sys.stderr, '[C] connecting to: %s; port: %s' % client_addr
 ssl_sock.connect(client_addr)
+user = raw_input('username:')
+pas = getpass.getpass('password:');
 
 try:
   while True:
