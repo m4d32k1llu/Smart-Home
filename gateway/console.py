@@ -5,9 +5,29 @@ import ssl
 import lamp
 import time
 
+hostname = 'db.ist.utl.pt'
+username = 'ist178876'
+password = 'epiphone'
+database = username
 TCP_IP = '192.168.2.1'
 TCP_PORT = 12345
 
+def Login(conn, username, password) :
+    cur = conn.cursor()
+    
+    cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
+
+    for name, pas in cur.fetchall() :
+        if bcrypt.checkpw(password, pas):
+	    return True
+    return False
+
+	
+try:
+    myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
+except:
+    print "Unable to connect to database"
+	
 prompt = "[HomeMgr: insert a command]>> "
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,6 +54,14 @@ while True:
     # if wrong, drop connection
 
     # if correct, do nothing
+	# send prompt
+      msg = "Please Log in..."
+      print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
+      ssl_conn.sendall(msg)
+
+      # receive command 
+      command = ssl_conn.recv(1024)
+      print "[G] received command:", command
   
     while True:
       # send prompt
