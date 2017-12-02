@@ -52,7 +52,7 @@ while True:
 
     # if correct, do nothing
     # send prompt
-    msg = "Please Log in..."
+    msg = "Please Log In"
     print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
     ssl_conn.sendall(msg)
 
@@ -63,12 +63,19 @@ while True:
     if len(data) != 3 or data[0] != "login":
         print "Login data received from sever was badly formated."
         print "Closing server connection..."
+        msg = "ERROR login"
         ssl_conn.sendall(msg)
     elif not Login(myConnection, data[1], data[2]):
         msg = "Login Failed"
         print msg
         ssl_conn.sendall(msg)
-    else:  
+    else:
+        msg = "Login True"
+        print msg
+        ssl_conn.sendall(msg)  
+        command = ssl_conn.recv(1024)
+        print "[G] received:", command
+        
         while True:
             # send prompt
             msg = prompt
