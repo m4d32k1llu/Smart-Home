@@ -32,12 +32,13 @@ print "Please input super user password..."
 try:
     myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
 except:
-   print "Unable to connect to database"
+    print "Unable to connect to database"
 pas = raw_input('password:')
-if(!Login(myConnection, "super", pas)):
-	print "Incorrect password"
+if not Login(myConnection, "super", pas):
+    print "Incorrect password"
 else:
-	user = raw_input('username:')
-	pas = raw_input('password:')
-	insert(myConnection, user, pas)
+    print "Type new user settings..."
+    user = raw_input('username:')
+    pas = raw_input('password:')
+    insert(myConnection, user, pas)
 myConnection.close()
