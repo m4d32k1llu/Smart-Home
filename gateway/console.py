@@ -4,6 +4,8 @@ import os
 import ssl
 import lamp
 import time
+import psycopg2
+import bcrypt
 
 hostname = 'db.ist.utl.pt'
 username = 'ist178876'
@@ -22,11 +24,6 @@ def Login(conn, username, password) :
 	    return True
     return False
 
-	
-try:
-    myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
-except:
-    print "Unable to connect to database"
 	
 prompt = "[HomeMgr: insert a command]>> "
 
@@ -48,49 +45,58 @@ while True:
                                keyfile="server.key")
   try:
     print >>sys.stderr, '[G] connected to:', client_addr
-
+    myConnection = psycopg2.connect(host = hostname, user=username, password=password, dbname=database)
     # authentication
 
     # if wrong, drop connection
 
     # if correct, do nothing
-	# send prompt
-      msg = "Please Log in..."
-      print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
-      ssl_conn.sendall(msg)
+    # send prompt
+    msg = "Please Log in..."
+    print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
+    ssl_conn.sendall(msg)
 
-      # receive command 
-      command = ssl_conn.recv(1024)
-      print "[G] received command:", command
-  
-    while True:
-      # send prompt
-      msg = prompt
-      print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
-      ssl_conn.sendall(msg)
+    # receive command 
+    command = ssl_conn.recv(1024)
+    print "[G] received command:", command
+    data = command.split()
+    if len(data) != 3 or data[0] != "login":
+        print "Login data received from sever was badly formated."
+        print "Closing server connection..."
+        ssl_conn.sendall(msg)
+    elif not Login(myConnection, data[1], data[2]):
+        msg = "Login Failed"
+        print msg
+        ssl_conn.sendall(msg)
+    else:  
+        while True:
+            # send prompt
+            msg = prompt
+            print >>sys.stderr, '[G] sending:  "%s"' % repr(msg)
+            ssl_conn.sendall(msg)
 
-      # receive command 
-      command = ssl_conn.recv(1024)
-      print "[G] received command:", command
+    	    # receive command 
+     	    command = ssl_conn.recv(1024)
+            print "[G] received command:", command
       
-      # print
-      # command = raw_input("[HomeMgr: insert a command]>> ")
-      if command == "lamp on":
-        lamp.client("1")
-        ssl_conn.sendall("lamp on")
-      elif command == "lamp off":
-        lamp.client("0")
-        ssl_conn.sendall("lamp off")
-      elif command == "fridge show":
-        break
-      elif command == "help" or command == "?":
-        ssl_conn.sendall("valid commands: [help, exit, lamp on, lamp off, fridge show]")
-      elif command == "exit" or command == "q":
-        ssl_conn.sendall("exiting...")
-        break
-      else:
-        ssl_conn.sendall("ERROR: command not found: input ? for help")
-      time.sleep(1)
+            # print
+            # command = raw_input("[HomeMgr: insert a command]>> ")
+            if command == "lamp on":
+                lamp.client("1")
+                ssl_conn.sendall("lamp on")
+            elif command == "lamp off":
+                lamp.client("0")
+                ssl_conn.sendall("lamp off")
+            elif command == "fridge show":
+                break
+            elif command == "help" or command == "?":
+                ssl_conn.sendall("valid commands: [help, exit, lamp on, lamp off, fridge show]")
+            elif command == "exit" or command == "q":
+                ssl_conn.sendall("exiting...")
+                break
+            else:
+                ssl_conn.sendall("ERROR: command not found: input ? for help")
+            time.sleep(1)
       
   finally:
     print '[G] closing connection to:', client_addr
