@@ -2,6 +2,7 @@ import socket
 import sys
 import os
 import ssl
+import fridge
 import lamp
 import time
 import psycopg2
@@ -95,7 +96,8 @@ while True:
                 lamp.client("0")
                 ssl_conn.sendall("lamp off")
             elif command == "fridge show":
-                break
+                fridge_msg = fridge.client("0")
+                ssl_conn.sendall(fridge_msg) 
             elif command == "help" or command == "?":
                 ssl_conn.sendall("valid commands: [help, exit, lamp on, lamp off, fridge show]")
             elif command == "exit" or command == "q":
@@ -104,7 +106,10 @@ while True:
             else:
                 ssl_conn.sendall("ERROR: command not found: input ? for help")
             time.sleep(1)
-      
+
+  except socket.error, e:
+    print "[G] CATCHED:", e
+    continue      
   finally:
     print '[G] closing connection to:', client_addr
     ssl_conn.close()
