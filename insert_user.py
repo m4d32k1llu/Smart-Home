@@ -21,8 +21,9 @@ def Login(conn, username, password) :
 def insert(conn, username, password) :
     cur = conn.cursor()
     hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+    data = (username, hashed)
     try:
-        cur.execute("insert into users values('" + username + "','"+hashed+"')")
+        cur.execute("insert into users values(%s,%s)", data)
         conn.commit()
     except:
         print "Unable to Insert user"

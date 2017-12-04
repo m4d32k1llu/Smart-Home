@@ -17,8 +17,8 @@ TCP_PORT = 12345
 
 def Login(conn, username, password) :
     cur = conn.cursor()
-    
-    cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
+    data = (username,) 
+    cur.execute( "SELECT * FROM users WHERE username = %s", data)
 
     for name, pas in cur.fetchall() :
         if bcrypt.checkpw(password, pas):
