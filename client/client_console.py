@@ -26,7 +26,7 @@ else:
     s = "Something went wrong... Exiting"
     print s
     ssl_sock.sendall(s)
-    ssl_cock.close()
+    ssl_sock.close()
     exit()
 r = ssl_sock.recv(1024)
 print "[C] received:", r
