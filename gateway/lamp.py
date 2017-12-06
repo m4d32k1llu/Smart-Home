@@ -26,7 +26,7 @@ def client(state):
     
     # send data
     iv = gen_iv()
-    message = chall_resp + "00000000" + os.urandom(7) + state + os.urandom(8)
+    message = chall_resp + "00000000" + os.urandom(7) + state + "11111111"
     send_msg(sock, iv, skey, message)
     print "[L] sent plaintext", repr(message)
 

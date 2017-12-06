@@ -36,7 +36,7 @@ def server():
       chall_resp = response1[0:8]
       sanity = response1[8:16]
       request = response1[16:]
-      if int(chall_resp,16) != expected_resp or not all(b == "0" for b in sanity):
+      if int(chall_resp,16) != expected_resp or not all(b == "0" for b in sanity) or not all(b == "1" for b in request[8:]) or len(request) > 16:
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
         continue
