@@ -14,6 +14,7 @@ INTEGRITY_KEY = "thisstheintegkey"
 INFO_BYTE = 13
 
 def server():
+  temperature = 5
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   server_addr = (TCP_IP,TCP_PORT)
   print >>sys.stderr, '[F] listening on: %s; port: %s' % server_addr
@@ -64,7 +65,7 @@ def server():
       msg = recv_msg(conn, skey)#, True)
       integrity_block = msg[:16]
       info_block = msg[16:32]
-      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[8:13]):
+      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[6:13]):
       # if msg == -1:
         print '[F] integrity breached, rejecting request from:', client_addr
         conn.close()
@@ -73,12 +74,32 @@ def server():
       # send response
       new_state = info_block[INFO_BYTE]
       if new_state == "0":
-        print "[F] got option 0"
+        print "[F] got option 0: print contents"
+        response = "Fridge has: 3 yogurt, 2 milk, 1 cheese, 5 ham"
+      elif new_state == "1":
+        print "[F] got option 1: print temperature"
+        response = "Fridge temperature is {} deg C".format(temperature)
+      elif new_state == "2":
+        if temperature < 10:
+          print "[F] got option 2: CAN raise temp"
+          response = "Raising fridge temperature 1 deg C"
+          temperature += 1
+        else:
+          print "[F] got option 2: CANNOT raise temp"
+          response = "Temperature at 10 deg C, cannot raise more"
+      elif new_state == "3":
+        if temperature > 0:
+          print "[F] got option 3: CAN lower temp"
+          response = "Lowering fridge temperature 1 deg C"
+          temperature -= 1
+        else:
+          print "[F] got option 3: CANNOT lower temp"
+          response = "Temperature at 0 deg C, cannot lower more"
       else:
         print "[F] unrecognized option", repr(new_state)
       iv = gen_iv()
-      response = "Fridge has: 3 yogurt, 2 milk, 1 cheese, 5 ham"
-      send_msg(conn, iv, skey, response)
+      send_msg(conn, iv, skey, response)      
+      
     except:
       print "[F] exception catched - Unexpected error:", sys.exc_info()[0]
       conn.close()

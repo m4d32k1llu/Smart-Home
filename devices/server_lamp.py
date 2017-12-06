@@ -44,7 +44,7 @@ def server():
       msg = recv_msg(conn, skey)#, True)
       integrity_block = msg[:16]
       info_block = msg[16:32]
-      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[8:13]):
+      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[6:13]):
       # if msg == -1:
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()

@@ -35,7 +35,6 @@ sock.bind(server_addr)
 
 sock.listen(1)
 
-# accept the connection
 while True:
   # Wait for a connection
   print >>sys.stderr, '[G] waiting for a connection'
@@ -97,9 +96,18 @@ while True:
                 ssl_conn.sendall("lamp off")
             elif command == "fridge show":
                 fridge_msg = fridge.client("0")
-                ssl_conn.sendall(fridge_msg) 
+                ssl_conn.sendall(fridge_msg)
+            elif command == "fridge temp":
+              fridge_message = fridge.client("1")
+              ssl_conn.sendall(fridge_message)
+            elif command == "fridge raise t":
+              fridge_message = fridge.client("2")
+              ssl_conn.sendall(fridge_message)        
+            elif command == "fridge lower t":
+              fridge_message = fridge.client("3")
+              ssl_conn.sendall(fridge_message)
             elif command == "help" or command == "?":
-                ssl_conn.sendall("valid commands: [help, exit, lamp on, lamp off, fridge show]")
+              ssl_conn.sendall("valid commands: [help, exit, lamp on, lamp off, fridge show, fridge temp, fridge raise t, fridge lower t]")
             elif command == "exit" or command == "q":
                 ssl_conn.sendall("exiting...")
                 break
@@ -109,7 +117,9 @@ while True:
 
   except socket.error, e:
     print "[G] CATCHED:", e
-    continue      
+    ssl_conn.close()
+    continue
+  
   finally:
     print '[G] closing connection to:', client_addr
     ssl_conn.close()

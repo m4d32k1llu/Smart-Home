@@ -31,7 +31,7 @@ def client(state):
     
     # send data
     iv = gen_iv()
-    message = INTEGRITY_KEY + os.urandom(INFO_BYTE - 5) + "00000" + state + os.urandom(16 - INFO_BYTE - 1)
+    message = INTEGRITY_KEY + os.urandom(INFO_BYTE - 7) + "0000000" + state + os.urandom(16 - INFO_BYTE - 1)
     send_msg(sock, iv, skey, message)
     print "[L] sent plaintext", repr(message)
 
