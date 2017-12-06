@@ -31,12 +31,9 @@ def server():
       print "[S] challenge sent:", nounce
       
       # receive challenge response + request
-      response = recv_msg(conn, skey)
-      chall_resp = response[0:8]
-      request = response[8:]
-      print "chall_resp",chall_resp
-      print "inteded resp", expected_resp
-      print "request", request
+      response1 = recv_msg(conn, skey)
+      chall_resp = response1[0:8]
+      request = response1[8:]
       if int(chall_resp,16) != expected_resp or not all(b == "0" for b in request[0:7]):
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
@@ -51,10 +48,11 @@ def server():
       else:
         print "[S] unrecognized option", repr(new_state)
       iv = gen_iv()
-      response = "DEBUG server received: [" +  msg + "] with new state [" + new_state + "]"
-      send_msg(conn, iv, skey, response)
-    except:
-      print "[S] exception catched"
+      response2 = "DEBUG server received: [" +  response1 + "] with new state [" + new_state + "]"
+      send_msg(conn, iv, skey, response2
+               
+    except socket.error,e:
+      print "[S] exception catched",e
       conn.close()
       
     finally:
