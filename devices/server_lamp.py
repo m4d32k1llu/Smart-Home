@@ -7,8 +7,6 @@ TCP_IP = '192.168.3.10'
 TCP_PORT = 31415
 
 KEK = "0123456789abcdef"
-INTEGRITY_KEY = "thisstheintegkey"
-INFO_BYTE = 13
 
 def server():
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,27 +29,21 @@ def server():
       nounce = int(os.urandom(4).encode('hex'),16)
       send_msg(conn, iv, skey, format(nounce,'x'))
       print "[S] challenge sent:", nounce
-      response = int(recv_msg(conn, skey),16)
-      print "[S] challenge response received:", response
-      if response != nounce - 1:
-        print "[S] challenge failed, closing connection"
-        conn.close()
-        continue
-      else:
-        print "[S] challenge accomplished, continue"
-        
-      # receive message
-      msg = recv_msg(conn, skey)#, True)
-      integrity_block = msg[:16]
-      info_block = msg[16:32]
-      if integrity_block != INTEGRITY_KEY or not all(b == "0" for b in info_block[6:13]):
-      # if msg == -1:
+      
+      # receive challenge response + request
+      response = recv_msg(conn, skey)
+      chall_resp = response[0:8]
+      request = response[8:]
+      print "chall_resp",chall_resp
+      print "inteded resp", expected_resp
+      print "request", request
+      if int(chall_resp,16) != expected_resp or not all(b == "0" for b in request[0:7]):
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
         continue
       
       # send response
-      new_state = info_block[INFO_BYTE]
+      new_state = request[7]
       if new_state == "1":
         print "[S] turning on the light"
       elif new_state == "0":
