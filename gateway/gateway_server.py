@@ -39,7 +39,7 @@ while True:
                                server_side=True,
                                certfile="server.crt",
                                keyfile="server.key")
-  ssl_conn.settimeout(10)
+  ssl_conn.settimeout(60)
   try:
     print >>sys.stderr, '[G] connected to:', client_addr
     myConnection = sqlite3.connect('../smarthome.db')
