@@ -1,4 +1,4 @@
-drop table users cascade;
+drop table users;
 
 create table users(
 	username	varchar(80) not null unique,

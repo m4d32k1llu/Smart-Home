@@ -1,12 +1,7 @@
 #!/usr/bin/python
 import getpass
-import psycopg2
+import sqlite3
 import bcrypt
-
-hostname = 'db.ist.utl.pt'
-username = 'ist178876'
-password = 'epiphone'
-database = username
 
 def Login(conn, username, password) :
     cur = conn.cursor()
@@ -14,7 +9,7 @@ def Login(conn, username, password) :
     cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
 
     for name, pas in cur.fetchall() :
-        if bcrypt.checkpw(password, pas):
+        if bcrypt.checkpw(password.encode('utf-8'), pas.encode('utf-8')):
 	    return True
     return False
 	
@@ -22,16 +17,17 @@ def insert(conn, username, password) :
     cur = conn.cursor()
     hashed = bcrypt.hashpw(password, bcrypt.gensalt())
     data = (username, hashed)
+    print data
     try:
-        cur.execute("insert into users values(%s,%s)", data)
-        conn.commit()
+        cur.execute("insert into users values(?,?)", data)
+        conn.commit()        
     except:
         print "Unable to Insert user"
     
 	
 print "Please input super user password..."
 try:
-    myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
+    myConnection = sqlite3.connect('smarthome.db')
 except:
     print "Unable to connect to database"
 pas = getpass.getpass('password:')

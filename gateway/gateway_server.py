@@ -5,23 +5,19 @@ import ssl
 import fridge
 import lamp
 import time
-import psycopg2
 import bcrypt
+import sqlite3
 
-hostname = 'db.ist.utl.pt'
-username = 'ist178876'
-password = 'epiphone'
-database = username
 TCP_IP = '192.168.2.1'
 TCP_PORT = 12345
 
 def Login(conn, username, password) :
     cur = conn.cursor()
     data = (username,) 
-    cur.execute( "SELECT * FROM users WHERE username = %s", data)
+    cur.execute( "SELECT * FROM users WHERE username = ?", data)
 
     for name, pas in cur.fetchall() :
-        if bcrypt.checkpw(password, pas):
+        if bcrypt.checkpw(password.encode('utf-8'), pas.encode('utf-8')):
 	    return True
     return False
 
@@ -45,7 +41,7 @@ while True:
                                keyfile="server.key")
   try:
     print >>sys.stderr, '[G] connected to:', client_addr
-    myConnection = psycopg2.connect(host = hostname, user=username, password=password, dbname=database)
+    myConnection = sqlite3.connect('../smarthome.db')
     # authentication
 
     # if wrong, drop connection
