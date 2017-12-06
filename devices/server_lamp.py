@@ -70,7 +70,4 @@ def server():
       conn.close()
 
 if __name__ == "__main__":
-  lampQ = True
-  fridgeQ = False
-
   server()
