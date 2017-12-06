@@ -3,7 +3,7 @@ import sys
 import os
 from crypt import *
 
-TCP_IP = '192.168.3.10'
+TCP_IP = "localhost"#'192.168.3.10'
 TCP_PORT = 31415
 
 KEK = "0123456789abcdef"
@@ -27,14 +27,16 @@ def server():
       print '[S] received session key:', repr(skey)
       iv = gen_iv()
       nounce = int(os.urandom(4).encode('hex'),16)
+      expected_resp = nounce - 1 
       send_msg(conn, iv, skey, format(nounce,'x'))
       print "[S] challenge sent:", nounce
       
       # receive challenge response + request
       response1 = recv_msg(conn, skey)
       chall_resp = response1[0:8]
-      request = response1[8:]
-      if int(chall_resp,16) != expected_resp or not all(b == "0" for b in request[0:7]):
+      sanity = response1[8:16]
+      request = response1[16:]
+      if int(chall_resp,16) != expected_resp or not all(b == "0" for b in sanity):
         print '[S] integrity breached, rejecting request from:', client_addr
         conn.close()
         continue
@@ -49,9 +51,9 @@ def server():
         print "[S] unrecognized option", repr(new_state)
       iv = gen_iv()
       response2 = "DEBUG server received: [" +  response1 + "] with new state [" + new_state + "]"
-      send_msg(conn, iv, skey, response2
+      send_msg(conn, iv, skey, response2)
                
-    except socket.error,e:
+    except socket.error, e:
       print "[S] exception catched",e
       conn.close()
       

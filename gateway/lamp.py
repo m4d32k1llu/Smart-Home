@@ -3,7 +3,7 @@ import sys
 import os
 from crypt import *
 
-TCP_IP = '192.168.3.10'
+TCP_IP = "localhost"#'192.168.3.10'
 TCP_PORT = 31415
 
 KEK = "0123456789abcdef"
@@ -26,7 +26,7 @@ def client(state):
     
     # send data
     iv = gen_iv()
-    message = "0000000" + state 
+    message = chall_resp + "00000000" + os.urandom(7) + state + os.urandom(8)
     send_msg(sock, iv, skey, message)
     print "[L] sent plaintext", repr(message)
 
@@ -39,5 +39,5 @@ def client(state):
     sock.close()
 
 if __name__ == "__main__":
-  state = "0" # 0 -> turn off light; 1 -> turn on light
+  state = "1" # 0 -> turn off light; 1 -> turn on light
   client(state)
