@@ -1,4 +1,4 @@
-drop table users;
+drop table if exists users;
 
 create table users(
 	username	varchar(80) not null unique,

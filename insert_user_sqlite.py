@@ -17,7 +17,6 @@ def insert(conn, username, password) :
     cur = conn.cursor()
     hashed = bcrypt.hashpw(password, bcrypt.gensalt())
     data = (username, hashed)
-    print data
     try:
         cur.execute("insert into users values(?,?)", data)
         conn.commit()        
