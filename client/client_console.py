@@ -9,7 +9,7 @@ TCP_PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_addr = (TCP_IP,TCP_PORT)
 
-sock.settimeout(10)
+sock.settimeout(60)
 
 ssl_sock = ssl.wrap_socket(sock,
                            ca_certs="server.crt",
