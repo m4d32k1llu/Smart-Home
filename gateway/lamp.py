@@ -3,7 +3,7 @@ import sys
 import os
 from crypt import *
 
-TCP_IP = "localhost"#'192.168.3.10'
+TCP_IP = '192.168.3.10'
 TCP_PORT = 31415
 
 KEK = "0123456789abcdef"
