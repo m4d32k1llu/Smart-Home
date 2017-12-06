@@ -11,10 +11,10 @@ database = username
 def doQuery( conn ) :
     cur = conn.cursor()
 
-    cur.execute( "SELECT nome FROM categoria" )
+    cur.execute( "SELECT * FROM users" )
 
-    for name in cur.fetchall() :
-        print name
+    for name, pas in cur.fetchall() :
+        print name, pas
 
 def Login(conn, username, password) :
     cur = conn.cursor()
@@ -22,14 +22,15 @@ def Login(conn, username, password) :
     cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
 
     for name, pas in cur.fetchall() :
-        if bcrypt.checkpw(password, pas):
+        if bcrypt.checkpw(password.encode('utf-8'), pas.encode('utf-8')):
 	    return "Logged in as " + name
     return "Incorrect username or password"
 	
-print "Using psycopg2"
-import psycopg2
-myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
+print "Using sqlite3"
+import sqlite3
+myConnection = sqlite3.connect('smarthome.db')
 user = raw_input('username:')
 pas = getpass.getpass('password:')
+#doQuery(myConnection)
 print Login(myConnection, user, pas)
 myConnection.close()
