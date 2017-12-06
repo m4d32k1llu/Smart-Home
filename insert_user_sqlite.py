@@ -5,8 +5,8 @@ import bcrypt
 
 def Login(conn, username, password) :
     cur = conn.cursor()
-    
-    cur.execute( "SELECT * FROM users WHERE username = '" + username + "'")
+    data = (username, )
+    cur.execute( "SELECT * FROM users WHERE username = ?", data)
 
     for name, pas in cur.fetchall() :
         if bcrypt.checkpw(password.encode('utf-8'), pas.encode('utf-8')):
@@ -22,7 +22,6 @@ def insert(conn, username, password) :
         conn.commit()        
     except:
         print "Unable to Insert user"
-    
 	
 print "Please input super user password..."
 try:
