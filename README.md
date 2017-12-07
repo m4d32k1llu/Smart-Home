@@ -24,7 +24,7 @@ After everything is installed:
 -The Gateway should have 3 adapters enabled.
 -Check that there is no conflicts between mac-adresses.
 -If you downloaded all required software in the first step, Lamp, Fridge and Client, just need one interface.
--Client, Fridge and Lamps should be attached to an internal network. e.g Frigde and Lamp, intranet, and client, intnet.
+-Client, Fridge and Lamps should be attached to an internal network. e.g Frigde and Lamp, intranet, and client, intnet, gateway must belong to both  internal networks.
 -Make sure the Gateway is attached to the same networks + NAT.
 
 Configure network interfaces for Gateway:  vi /etc/network interfaces 
