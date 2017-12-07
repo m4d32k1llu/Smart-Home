@@ -73,6 +73,9 @@ Network: 192.168.3.0
 broadcast 192.168.3.255
 gateway 192.168.3.1
 
+After each change to the interfaces, a restart is needed.
+use the command "ifup up && ifdown down" to restart the interfaces.
+Then reboot the system.
 
 Then deploy code:
 -To get the database running in the Gateway
