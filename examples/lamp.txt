@@ -1,0 +1,81 @@
+CLIENT:
+$ python client_console.py 
+[C] connecting to: localhost; port: 12345
+[C] received: Please Log In
+username:super
+password:
+[C] received: Login True
+[C] received: [HomeMgr: insert a command]>> 
+?
+[C] sending: ?
+[C] received answer: valid commands: [help, exit, lamp on, lamp off, fridge show, fridge temp, fridge raise t, fridge lower t]
+[C] received: [HomeMgr: insert a command]>> 
+lamp on
+[C] sending: lamp on
+[C] received answer: lamp on
+[C] received: [HomeMgr: insert a command]>> 
+lamp off
+[C] sending: lamp off
+[C] received answer: lamp off
+[C] received: [HomeMgr: insert a command]>> 
+
+
+
+
+GATEWAY:
+$ python gateway_server.py 
+[G] listening on: localhost; port: 12345
+[G] waiting for a connection
+[G] connected to: ('127.0.0.1', 40402)
+[G] sending:  "'Please Log In'"
+[G] received command: login super 1ns3cur3
+Login True
+[G] received: Logged In
+[G] sending:  "'[HomeMgr: insert a command]>> '"
+[G] received command: ?
+[G] sending:  "'[HomeMgr: insert a command]>> '"
+[G] received command: lamp on
+[L] connecting to: localhost; port: 31415
+[*] sending:  "'\x1d\xee\xad/\xad\x96f\xda\x96s\x1ePLCS\xeb\xa0|:#\xb5\xb8\xce\xf6\x01\xb0<\xf9\xc5N\x89\xe9\xc9\xc8\x1c\xb96\xaf4\xae\xbb\xef\xa2D\\\x05T\x1c'"
+[L] sent session key: '\xd6p\x02N\x89<\xd0qY\xd2\xab\xf9\x1b;Uv'
+[*] received dec: "'47045abd'"
+[L] received challenge: 1191467709
+[*] sending:  ""\x94\xf0\xa4\x91\x98\x02\xccm\xae8<\xff\x84\x8c.ot\xd3\\\xdb\xf4\xea9i\xa4\xa2\x08\xb8j\xf8\x08q\xfdx\xc3\xe94\xb4\x7f\x92\x1f\x89\xda>uwpU\xb8j'\xa1\xa8\xa5)\xfc\xd2\xf4?\xdf.\xcd\xb6\xb0""
+[L] sent plaintext '47045abc00000000\x06\xa7\xfdX\\w\x83111111111'
+[L] closing socket
+[G] sending:  "'[HomeMgr: insert a command]>> '"
+[G] received command: lamp off
+[L] connecting to: localhost; port: 31415
+[*] sending:  "'u\xff\xacq\n\x92\xd7\x18vf\xd0\x1ai)\x12\xa4,w\xd0i\x02,\x0b\ni\\*!u\x98\x85\xad!\xe4\xdc\xa80\xc6H\x91XG\rs\xa2\xc8\xb8\x94'"
+[L] sent session key: '\xd0\x01\xcc\x16\xd2[\xa9\x1cef\xd0\xe5V\x06\xacm'
+[*] received dec: "'a48ac059'"
+[L] received challenge: 2760556633
+[*] sending:  "'\x84\xe4\xcb\xea\x08\x9e^%\xda\x0b{\x03\xddN&\x1c\xba\xd7B\xdfo\xda\x9c\xdd \x06b\x9br\xb5\x0e_w\x0c\x80\xaeW\xac_\t4=\x92)\xfc\x82\xb1\x9c\xc6\xf4lt\xf0\xde\x15~\xee\x9f\xf13\xeb\xd8\x94p'"
+[L] sent plaintext 'a48ac05800000000n\xa5$\x94L\x8a\xd3011111111'
+[L] closing socket
+[G] sending:  "'[HomeMgr: insert a command]>> '"
+
+
+
+
+LAMP:
+[S] listening on: localhost; port: 31415
+[S] waiting for a connection
+[S] connected to: ('127.0.0.1', 38818)
+[*] received dec: "'\xd6p\x02N\x89<\xd0qY\xd2\xab\xf9\x1b;Uv'"
+[S] received session key: '\xd6p\x02N\x89<\xd0qY\xd2\xab\xf9\x1b;Uv'
+[*] sending:  "'u\xc1ss\xc1r\x843\x06\xdd/\x0fW\xef\xbf\xcd&?F\x94#0\xbd\x93\xe0\xb5\x9c\xdb\xceN\x8d '"
+[S] challenge sent: 1191467709
+[*] received dec: "'47045abc00000000\x06\xa7\xfdX\\w\x83111111111'"
+[S] turning on the light
+[S] closing connection to: ('127.0.0.1', 38818)
+[S] waiting for a connection
+[S] connected to: ('127.0.0.1', 38844)
+[*] received dec: "'\xd0\x01\xcc\x16\xd2[\xa9\x1cef\xd0\xe5V\x06\xacm'"
+[S] received session key: '\xd0\x01\xcc\x16\xd2[\xa9\x1cef\xd0\xe5V\x06\xacm'
+[*] sending:  "'\xc5\xee \x17(A\xb2N+0\xa6M\xbf\xa5\x8c\xa4\x03\x07\x88l\x91\xca\xed9\xbad=\x8a\xb5\x0b\xd9\xcd'"
+[S] challenge sent: 2760556633
+[*] received dec: "'a48ac05800000000n\xa5$\x94L\x8a\xd3011111111'"
+[S] turning off the light
+[S] closing connection to: ('127.0.0.1', 38844)
+[S] waiting for a connection
