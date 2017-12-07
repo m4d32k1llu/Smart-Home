@@ -31,8 +31,8 @@ def client(state):
     print "[L] sent plaintext", repr(message)
 
     # receive response
-    response = recv_msg(sock, skey)
-    print '[L] response: "%s"' % repr(response)
+    #response = recv_msg(sock, skey)
+    #print '[L] response: "%s"' % repr(response)
 
   finally:
     print >>sys.stderr, '[L] closing socket'

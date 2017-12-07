@@ -49,9 +49,9 @@ def server():
         print "[S] turning off the light"
       else:
         print "[S] unrecognized option", repr(new_state)
-      iv = gen_iv()
-      response2 = "DEBUG server received: [" +  response1 + "] with new state [" + new_state + "]"
-      send_msg(conn, iv, skey, response2)
+      #iv = gen_iv()
+      #response2 = "DEBUG server received: [" +  response1 + "] with new state [" + new_state + "]"
+      #send_msg(conn, iv, skey, response2)
                
     except socket.error, e:
       print "[S] exception catched",e
