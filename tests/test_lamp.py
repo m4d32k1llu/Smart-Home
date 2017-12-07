@@ -1,0 +1,47 @@
+import socket
+import sys
+import os
+from crypt import *
+
+TCP_IP = "localhost"#'192.168.3.10'
+TCP_PORT = 31415
+
+KEK = "0123456789abcdef"
+
+def client(state):
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  client_addr = (TCP_IP,TCP_PORT)
+  print >>sys.stderr, '[L] connecting to: %s; port: %s' % client_addr
+  sock.connect(client_addr)
+
+  try:
+    # send session key and check freshness
+    iv = gen_iv()
+    skey = generate_skey()
+    send_msg(sock, iv, KEK, skey)
+    print '[L] sent session key:', repr(skey)
+    chall = recv_msg(sock, skey)
+    print "[L] received challenge:", int(chall,16)
+
+    ############ FAIL CHALLENGE ############
+    chall_resp = format(int(chall,16) - 2,'x')
+    
+    # send data
+    iv = gen_iv()
+
+    ########### FAIL INTEGRITY KEYS ###########
+    message = chall_resp + "00000100" + os.urandom(7) + state + "11111111"
+    send_msg(sock, iv, skey, message)
+    print "[L] sent plaintext", repr(message)
+
+    # receive response
+    response = recv_msg(sock, skey)
+    print '[L] response: "%s"' % repr(response)
+
+  finally:
+    print >>sys.stderr, '[L] closing socket'
+    sock.close()
+
+if __name__ == "__main__":
+  state = "1" # 0 -> turn off light; 1 -> turn on light
+  client(state)
