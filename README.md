@@ -8,8 +8,8 @@ Install the requierd libraries and other needed software
 -pycrypto
 -Python 2.7
 -Github 
--
--
+-Fail2ban
+-iptables-presistent 
 
 After all packeges is installed
 -Clone the WM and call them, Client, Lamp and Fridge.
@@ -75,7 +75,42 @@ gateway 192.168.3.1
 
 
 Then deploy code:
-To get the database running in 
+To get the database running in the Gateway
+Cd to Smart-Home
+Run Python createBD.py
+To create a user:
+run Python insert_user_sqlite.py
+Enter superpassword ("1ns3cur3")
+Enter username: " "
+Enter password: " "
+
+To check that everything is working, -cd to gateway and run Python gateway_server.py
+Open the client cd to client and run Python client_console.py
+Make sure that you can log inn. 
+#Make sure that gateway_server.py is listning on 0.0.0.0 and port 12345.
+
+
+Run the Fridge and Lamp, cd into devices, and run their respective servers.
+-Python server_fridge.py
+-Python server_lamp.py
+
+
+Setting up firewall:
+Input rules
+iptables - A INPUT -p tcp -m multiport --dports 12345,31414,31415 -j f2b-sshd (<- Fail2ban set up, accepting these TCP ports.)
+iptables - A INPUT -p tcp  -s 192.168.2.100 -j --dports 12345 ACCEPT
+iptables - A INPUT -p tcp  -s 192.168.3.100 -j --dports 31414 ACCEPT
+iptables - A INPUT -p tcp  -s 192.168.3.10 -j --dports 31415 ACCEPT
+
+Output Rules
+iptables - A OUTPUT -p tcp  -s 192.168.3.1 -j  ACCEPT
+iptables - A OUTPUT -p tcp  -s 192.168.2.1 -j  ACCEPT
+iptables - A OUTPUT -p tcp  -s 10.0.2.15 -j  ACCEPT
+iptables -A OUTPUT -j DROP
+
+Forward Rules:
+iptables -A FORWARD -j DROP
+
 
 
 
