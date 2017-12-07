@@ -1,17 +1,24 @@
 # Smart-Home
+This project is about simulating a Smart-Home in the course Network and Cyber Security at IST.
+We have created a simulated system consisting of a "Client", a "Gateway", and two "smart devices", a "frigde" and a "lamp."
 
-How to set up.
-The simulation is made with for Ubuntu 16.04 servers, running over VirtualBox.
+This is a short explanation of how you can set up our system.
+The simulation is made with Ubuntu 16.04 servers, running over VirtualBox.
+
 First create one ubuntu 16.04 server.
 Install the requierd libraries and other needed software
 -Bcrypt
 -pycrypto
 -Python 2.7
+-Sqlite3 
+-ssl
+-socket
 -Github 
 -Fail2ban
 -iptables-presistent 
 
-After all packeges is installed
+After everything is installed:
+-Git clone "this project" in the gateway.
 -Clone the WM and call them, Client, Lamp and Fridge.
 -Change the network adapters for the VMS.
 -The Gateway should have 3 adapters enabled.
